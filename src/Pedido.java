@@ -48,6 +48,5 @@ public class Pedido {
         float unidadeDoce = entrada.nextFloat();
 
         this.cliente = cliente;
-        cliente.adicionarPedido(this);
     }
 }

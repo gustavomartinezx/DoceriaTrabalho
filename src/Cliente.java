@@ -16,7 +16,10 @@ public class Cliente {
         this.Endereco = entrada.nextLine();
     }
 
-    public void adicionarPedido(Pedido novoPedido) {
+    public void fazerPedido() {
+        Pedido novoPedido = new Pedido();
+        novoPedido.setInformacoes(this);
         this.pedido = novoPedido;
     }
+
 }
