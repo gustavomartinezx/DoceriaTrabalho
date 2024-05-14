@@ -7,6 +7,7 @@ public class Funcionario {
     private int idade;
     private String sexo;
     private float salario;
+    private String CPF;
 
     public void setInformacoes() {
         System.out.println("Qual é o nome do funcionário?");
@@ -36,6 +37,19 @@ public class Funcionario {
                 System.out.println("Informação inválida,");
             }
         }
+
+
+        System.out.println("Digite o CPF do funcionário (apenas números):");
+        String cpf = entrada.next();
+
+        while (cpf.length() != 11) {
+            System.out.println("CPF inválido! Digite novamente (tem que contar 11 digitos!):");
+            cpf = entrada.next();
+        }
+
+        this.CPF = cpf;
+
+
     }
 
     public void mostrarInformacoes() {
@@ -44,7 +58,19 @@ public class Funcionario {
         System.out.println("Idade: " + this.getIdade());
         System.out.println("Salário: " + this.getSalario());
         System.out.println("Sexo: " + this.getSexo());
+        System.out.println("Sexo: " + this.getCPF());
+
     }
+
+
+    public String getCPF() {
+        return CPF;
+    }
+
+    public void setCPF(String CPF) {
+        this.CPF = CPF;
+    }
+
 
     public String getNome() {
         return Nome;

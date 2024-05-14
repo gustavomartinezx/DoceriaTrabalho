@@ -1,6 +1,8 @@
 import java.util.Scanner;
 
 public class Gerente extends Funcionario {
+
+
     public void ContrataFuncionario() {
         Scanner entrada = new Scanner(System.in);
         System.out.println("Qual funcionário você decide contratar?");
@@ -14,7 +16,6 @@ public class Gerente extends Funcionario {
         switch (numeroFuncionario){
             case 1:
                 Caixa FuncionarioCaixa = new Caixa();
-
 
         }
     }
