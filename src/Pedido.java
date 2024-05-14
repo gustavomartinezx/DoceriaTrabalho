@@ -3,7 +3,7 @@ import java.util.Scanner;
 public class Pedido {
     String item;
     float valorTotal;
-    String status;
+    String status = "Pendente";
     Cliente cliente;
 
 
@@ -40,9 +40,6 @@ public class Pedido {
         System.out.println("Digite o valor total do pedido:");
         this.valorTotal = entrada.nextFloat();
         entrada.nextLine();
-
-        System.out.println("Digite o status do pedido:");
-        this.status = entrada.nextLine();
 
         this.cliente = cliente;
         cliente.adicionarPedido(this);
