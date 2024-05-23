@@ -1,6 +1,7 @@
 import GUICliente.ClienteView;
 import GUIPedido.PedidoCtrl;
 import GUIPedido.PedidoView;
+import GUIGerente.GerenteView;
 
 import javax.swing.*;
 
@@ -9,8 +10,12 @@ public class Main {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                PedidoView pedidoView = new PedidoView();
-                pedidoView.setVisible(true);
+                GerenteView gerenteView = new GerenteView();
+                gerenteView.setVisible(true);
+                //ClienteView clienteView = new ClienteView();
+                //clienteView.setVisible(true);
+                //PedidoView pedidoView = new PedidoView();
+                //pedidoView.setVisible(true);
             }
         });
     }
