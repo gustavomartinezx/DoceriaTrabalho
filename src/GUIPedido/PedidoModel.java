@@ -2,9 +2,12 @@ package GUIPedido;
 
 import GUICliente.ClienteModel;
 
-public class    PedidoModel {
+import java.util.List;
+
+public class PedidoModel {
     private String item;
     int quantidade;
+    private List<PedidoModel> listaDocinhos;
     private float valorTotal;
     private ClienteModel cliente;
 
@@ -13,16 +16,30 @@ public class    PedidoModel {
         this.valorTotal = valorTotal;
         this.cliente = cliente;
         this.quantidade = quantidade;
-        this.quantidade = quantidade;
+    }
+
+    public void addListaDocinhos(List<PedidoModel> listaDocinhos){
+        this.listaDocinhos = listaDocinhos;
+    }
+
+    public String getItem() {
+        return item;
+    }
+
+    public int getQuantidade() {
+        return quantidade;
+    }
+
+    public float getValorTotal() {
+        return valorTotal;
+    }
+
+    public ClienteModel getCliente() {
+        return cliente;
     }
 
     @Override
     public String toString() {
-        return "PedidoModel{" +
-                "item='" + item + '\'' +
-                ", valorTotal=" + valorTotal +
-                ", cliente=" + cliente +
-                ", quantidade=" + quantidade +
-                '}';
+        return "Item: " + item + ", Valor Total: " + valorTotal;
     }
 }

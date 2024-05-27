@@ -10,12 +10,12 @@ public class Main {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                GerenteView gerenteView = new GerenteView();
-                gerenteView.setVisible(true);
+                //GerenteView gerenteView = new GerenteView();
+                //gerenteView.setVisible(true);
                 //ClienteView clienteView = new ClienteView();
                 //clienteView.setVisible(true);
-                //PedidoView pedidoView = new PedidoView();
-                //pedidoView.setVisible(true);
+                PedidoView pedidoView = new PedidoView();
+                pedidoView.setVisible(true);
             }
         });
     }

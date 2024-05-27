@@ -19,9 +19,14 @@ public class FuncionarioModel {
     }
 
     public String getCpf() { return cpf; }
+
     public String getCargo() { return cargo; }
 
     public float getSalario() { return salario; }
+
+    public void setSalario(float salario) {
+        this.salario = salario;
+    }
 
     @Override
     public String toString() {

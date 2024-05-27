@@ -8,18 +8,15 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
+import java.util.List;
 
 public class PedidoView extends JFrame {
-    String docinho;
-    String Cliente;
-    float preco;
-    JComboBox<String> arrayDocinhos, arrayClientes; //A lista de itens selecionados
-    JLabel lblDocinhos, lblUnidades, lblCliente; // campo do nome
-    JTextField txtUnidades; // campo de texto
-    JPanel pnlRodape, pnlForm; // paineis
-    JButton btnCadastrar, btnLimpar;// botões
+    JComboBox<String> arrayClientes; // Lista de clientes
+    JLabel lblDocinhos, lblCliente; // Labels
+    JPanel pnlRodape, pnlForm; // Paineis
+    JButton btnCadastrar, btnAddDocinho; // Botões
 
-    String[] docinhos = {"Brigadeiro", "Bem casado", "Brigadeiro de Leite Ninho", "Beijinho"};
+    List<PedidoModel> listaDocinhos = new ArrayList<>(); // Lista de docinhos
 
     public PedidoView() {
         inicializar();
@@ -31,108 +28,97 @@ public class PedidoView extends JFrame {
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.getContentPane().add(this.getForm(), BorderLayout.CENTER);
         this.getContentPane().add(this.getRodape(), BorderLayout.PAGE_END);
+        this.setResizable(false);
+        this.setSize(400, 400);
         pack();
         this.eventos();
     }
 
-
-    private JPanel getForm(){
-        if(this.pnlForm == null){
-            this.pnlForm = new JPanel(new GridLayout(3, 2));
-
+    private JPanel getForm() {
+        if (this.pnlForm == null) {
+            this.pnlForm = new JPanel(new GridLayout(2, 2)); // Layout ajustado
         }
 
-        this.lblUnidades = new JLabel("Unidades:");
         this.lblDocinhos = new JLabel("Docinhos:");
         this.lblCliente = new JLabel("Cliente:");
 
-
-        this.txtUnidades = new JTextField();
-        arrayDocinhos = new JComboBox<>(docinhos);
         this.arrayClientes = new JComboBox<>();
 
         ArrayList<ClienteModel> clientes = ClienteCtrl.getClientes();
-        for(ClienteModel cliente : clientes){
+        for (ClienteModel cliente : clientes) {
             this.arrayClientes.addItem(cliente.getNome());
         }
 
 
+        // Adiciona o botão "+"
+        this.btnAddDocinho = new JButton("+");
+        this.btnAddDocinho.addActionListener(e -> abrirItemView());
+
         this.pnlForm.add(lblDocinhos);
-        this.pnlForm.add(arrayDocinhos);
-        this.pnlForm.add(lblUnidades);
-        this.pnlForm.add(txtUnidades);
+        this.pnlForm.add(btnAddDocinho); // Adiciona o botão "+" ao formulário
         this.pnlForm.add(lblCliente);
         this.pnlForm.add(arrayClientes);
 
         return this.pnlForm;
     }
 
+    // Método para abrir o painel GUIItemView
+    private void abrirItemView() {
+        GUIItemView itemView = new GUIItemView(PedidoView.this);
+        itemView.setVisible(true);
+    }
 
-
-
-
-    //rodapé
-
-
-    //rodapé da página
-    private JPanel getRodape(){
-        if (this.pnlRodape == null){
+    // Rodapé da página
+    private JPanel getRodape() {
+        if (this.pnlRodape == null) {
             this.pnlRodape = new JPanel();
         }
 
-        // criação dos botões
-        this.btnLimpar = new JButton("Limpar");
+        // Criação dos botões
         this.btnCadastrar = new JButton("Cadastrar");
 
-
-        // atalho dos botões
-        this.btnLimpar.setMnemonic(KeyEvent.VK_L);
         this.btnCadastrar.setMnemonic(KeyEvent.VK_ENTER);
 
-
-        //adição dos botões no rodapé
-        this.pnlRodape.add(btnLimpar);
+        // Adição dos botões no rodapé
         this.pnlRodape.add(btnCadastrar);
-
 
         this.pnlRodape.setBackground(Color.blue);
         return this.pnlRodape;
     }
 
-
-
-    // métodos para eventos dos botões
-    private void eventos(){
-        this.btnLimpar.addActionListener(this::btnLimpar);
+    // Métodos para eventos dos botões
+    private void eventos() {
         this.btnCadastrar.addActionListener(this::btnCadastrar);
     }
 
 
-    private void btnLimpar(ActionEvent evento){
-        this.txtUnidades.setText("");
-    }
-
-    private void btnCadastrar(ActionEvent evento){
-
+    private void btnCadastrar(ActionEvent evento) {
         String nomeCliente = (String) this.arrayClientes.getSelectedItem();
         ClienteModel clienteSelecionado = null;
 
-        for(ClienteModel cliente : ClienteCtrl.getClientes()){
-            if(cliente.getNome().equals(nomeCliente)){
+        for (ClienteModel cliente : ClienteCtrl.getClientes()) {
+            if (cliente.getNome().equals(nomeCliente)) {
                 clienteSelecionado = cliente;
                 break;
             }
         }
-        preco = 2 * Integer.parseInt(txtUnidades.getText());
 
-        PedidoModel pedido = new PedidoModel((String) this.arrayDocinhos.getSelectedItem(),
-                preco,
-                clienteSelecionado,
-                Integer.parseInt(txtUnidades.getText()));
+        // Calcula o preço total dos docinhos adicionados
+        float precoTotal = 0;
+        for (PedidoModel pedido : listaDocinhos) {
+            precoTotal += pedido.getValorTotal();
+        }
 
-        PedidoCtrl.adicionarPedido(pedido);
+        PedidoModel pedido = new PedidoModel("Pedido", precoTotal, clienteSelecionado, 1); // Quantidade não utilizada
         System.out.println(pedido);
-        JOptionPane.showMessageDialog(this, "Pedido registrado. O total deu: "+ preco);
+        System.out.println(listaDocinhos);
+        pedido.addListaDocinhos(listaDocinhos);
+
+        JOptionPane.showMessageDialog(this, "Pedido registrado. O total deu: " + precoTotal);
     }
 
+    // Método para adicionar docinho à lista
+    public void adicionarDocinho(PedidoModel docinho) {
+        listaDocinhos.add(docinho);
+    }
 }

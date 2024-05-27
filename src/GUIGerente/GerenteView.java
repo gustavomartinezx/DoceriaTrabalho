@@ -2,8 +2,6 @@ package GUIGerente;
 
 import GUIFuncionario.FuncionarioCtrl;
 import GUIFuncionario.FuncionarioModel;
-import GUIGerente.GerenteModel;
-import GUIGerente.GerenteCtrl;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,7 +13,7 @@ public class GerenteView extends JFrame {
     JTextField txtValor;
     JComboBox<String> arrayFuncionarios;
     JLabel lblFuncionario, lblValor;
-    JButton btnCadastrar, btnLimpar, btnMostrarDetalhes;
+    JButton btnDiminuir, btnAumentar, btnMostrarDetalhes;
     JPanel pnlRodape, pnlForm;
 
 
@@ -70,19 +68,19 @@ public class GerenteView extends JFrame {
         }
 
         // criação dos botões
-        this.btnLimpar = new JButton("Limpar");
-        this.btnCadastrar = new JButton("Cadastrar");
+        this.btnAumentar = new JButton("Aumentar Salário");
+        this.btnDiminuir = new JButton("DiminuirSalário");
         this.btnMostrarDetalhes = new JButton("Mostrar Detalhes");
 
 
         // atalho dos botões
-        this.btnLimpar.setMnemonic(KeyEvent.VK_L);
-        this.btnCadastrar.setMnemonic(KeyEvent.VK_ENTER);
+        this.btnAumentar.setMnemonic(KeyEvent.VK_L);
+        this.btnDiminuir.setMnemonic(KeyEvent.VK_ENTER);
 
 
         //adição dos botões no rodapé
-        this.pnlRodape.add(btnLimpar);
-        this.pnlRodape.add(btnCadastrar);
+        this.pnlRodape.add(btnAumentar);
+        this.pnlRodape.add(btnDiminuir);
         this.pnlRodape.add(btnMostrarDetalhes);
 
 
@@ -90,17 +88,72 @@ public class GerenteView extends JFrame {
         return this.pnlRodape;
     }
 
+
     // métodos para eventos dos botões
     private void eventos() {
-        this.btnLimpar.addActionListener(this::btnLimparCLick);
+        this.btnAumentar.addActionListener(this::btnAumentarSalario);
+        this.btnDiminuir.addActionListener(this::btnDiminuirSalario);
         this.btnMostrarDetalhes.addActionListener(this::btnMostrarDetalhesClick);
-        this.btnCadastrar.addActionListener(this::setBtnCadastar);
-    }
-    private void btnLimparCLick(ActionEvent evento) {
-        this.txtValor.setText("");
     }
 
+
+    // ação de diminuir salário
+    private void btnDiminuirSalario(ActionEvent evento) {
+        String nomeFuncionario = (String) this.arrayFuncionarios.getSelectedItem();
+
+        FuncionarioModel funcionarioSelecionado = null;
+
+        for (FuncionarioModel funcionario : FuncionarioCtrl.getFuncionarios()) {
+            if (funcionario.getNome().equals(nomeFuncionario)) {
+                funcionarioSelecionado = funcionario;
+                break;
+            }
+        }
+
+        float valor = Float.parseFloat(txtValor.getText());
+        float salarioDiminuido = funcionarioSelecionado.getSalario() - valor;
+
+        if(funcionarioSelecionado!=null){
+            funcionarioSelecionado.setSalario(salarioDiminuido);
+        }
+
+        mostraInformacao(funcionarioSelecionado);
+    }
+
+    // ação de aumentar salário
+    private void btnAumentarSalario(ActionEvent evento){
+        String nomeFuncionario = (String) this.arrayFuncionarios.getSelectedItem();
+
+        FuncionarioModel funcionarioSelecionado = null;
+
+        for (FuncionarioModel funcionario : FuncionarioCtrl.getFuncionarios()) {
+            if (funcionario.getNome().equals(nomeFuncionario)) {
+                funcionarioSelecionado = funcionario;
+                break;
+            }
+        }
+
+
+        float valor = Float.parseFloat(txtValor.getText());
+        float salarioAumentado = funcionarioSelecionado.getSalario() + valor;
+
+        if(funcionarioSelecionado!=null){
+
+            funcionarioSelecionado.setSalario(salarioAumentado);
+        }
+
+        mostraInformacao(funcionarioSelecionado);
+
+    }
+
+
+
+
+
+    // ação de mostrar detalhes
+
     private void btnMostrarDetalhesClick(ActionEvent evento) {
+
         String nomeFuncionario = (String) this.arrayFuncionarios.getSelectedItem();
         FuncionarioModel funcionarioSelecionado = null;
 
@@ -110,6 +163,15 @@ public class GerenteView extends JFrame {
                 break;
             }
         }
+
+        mostraInformacao(funcionarioSelecionado);
+    }
+
+
+    // método de mostrar informação
+    private void mostraInformacao(FuncionarioModel funcionarioSelecionado){
+
+
         if (funcionarioSelecionado != null) {
             String mensagem = "Nome: " + funcionarioSelecionado.getNome() +
                     "\nCPF: " + funcionarioSelecionado.getCpf() +
@@ -121,22 +183,4 @@ public class GerenteView extends JFrame {
         }
     }
 
-    private void setBtnCadastar(ActionEvent evento) {
-
-        String nomeFuncionario = (String) this.arrayFuncionarios.getSelectedItem();
-        FuncionarioModel funcionarioSelecionado = null;
-
-        for (FuncionarioModel funcionario : FuncionarioCtrl.getFuncionarios()) {
-            if (funcionario.getNome().equals(nomeFuncionario)) {
-                funcionarioSelecionado = funcionario;
-                break;
-            }
-        }
-        GerenteModel gerente = new GerenteModel(
-                funcionarioSelecionado,
-                Float.parseFloat(txtValor.getText())
-        );
-        System.out.println(gerente);
-        JOptionPane.showMessageDialog(this, "Funcionário registrado com sucesso!");
-    }
 }
